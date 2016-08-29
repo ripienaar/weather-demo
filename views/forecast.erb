@@ -1,32 +1,79 @@
-<H2>Weather for <%= ENV["FORECAST_LOCATION"] %></H2>
-<table>
-  <tr><th>Today Conditions</th></tr>
-  <tr><td>Summary:</td><td><%= @forecast.daily.data[0].summary %></td></tr>
-  <tr><td>Temperature:</td><td><%= @forecast.daily.data[0].temperatureMin %> - <%= @forecast.daily.data[0].temperatureMax %>C feels like <%= @forecast.daily.data[0].apparentTemperatureMin %> - <%= @forecast.daily.data[0].apparentTemperatureMax %>C</td></tr>
-  <tr><td>Humidity:</td><td><%= @forecast.daily.data[0].humidity * 100 %>%</td></tr>
-  <tr><td>Wind Speed:</td><td><%= @forecast.daily.data[0].windSpeed %>km/h</td></tr>
-  <tr><td>Change of Rain</td><td><%= @forecast.daily.data[0].precipProbability * 100 %>%</td></tr>
-  <tr><td>Next 5 days:</td><td><%= @forecast.daily.summary %></td></tr>
-</table>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/template.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Weather for <%= ENV["FORECAST_LOCATION"] %></a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <p class="navbar-text navbar-right">Weather data by <a href="http://forecast.io" class="navbar-link">forecast.io</a></p>
+        </div>
+      </div>
+    </nav>
 
-<script src="/skycons.js"></script>
-<script>
-  var skycons = new Skycons({"color": "black"});
-  skycons.play();
-</script>
-<br>
-<table>
-  <tr>
-    <th>Current</th>
-    <% @forecast.daily.data.each do |day| %>
-      <th><%= weekday(Time.at(day.time).wday) %></th>
-    <% end %>
-  </tr>
-  <tr>
-    <td><canvas id="current" width="40" height="40"><script>skycons.add("current", "<%= @forecast.currently.icon %>");</script></td>
-    <% @forecast.daily.data.each do |day| %>
-      <td align="center">
-        <canvas id="<%= day.time %>" width="40" height="40"><script>skycons.add("<%= day.time %>", "<%= day.icon %>");</script>
-      </td>
-    <% end %>
-</table>
+    <div class="container content">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Forecast</h3>
+        </div>
+        <div class="panel-body">
+            <H3>Todays Conditions</H3>
+            <p>
+              <canvas id="now" width="80" height="80" class="now-glyph">
+            </p>
+            <p>
+              <%= @forecast.daily.data[0].summary %>
+            </p>
+            <p>
+              <%= @forecast.daily.data[0].temperatureMin %> - <%= @forecast.daily.data[0].temperatureMax %>C feels like <%= @forecast.daily.data[0].apparentTemperatureMin %> - <%= @forecast.daily.data[0].apparentTemperatureMax %>C
+            </p>
+            <p>
+              Wind speed <%= @forecast.daily.data[0].windSpeed %>km/h
+            </p>
+            <p>
+              <%= @forecast.daily.data[0].precipProbability * 100 %>% chance of rain
+            </p>
+            <script src="/skycons.js"></script>
+            <script>
+              var skycons = new Skycons({"color": "grey"});
+            </script>
+            <H3>Looking Ahead</H3>
+            <table class="table forecast">
+              <tr class="head">
+                <td><strong>Current</strong></td>
+                <% @forecast.daily.data.each do |day| %>
+                  <td><strong><%= weekday(Time.at(day.time).wday) %></strong></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>
+                  <p><canvas id="current" width="40" height="40" class="future-glyph"><script>skycons.add("current", "<%= @forecast.currently.icon %>");</script></p>
+                  <p><%= "%d" % @forecast.currently.temperature %></p>
+                </td>
+                <% @forecast.daily.data.each do |day| %>
+                  <td>
+                    <p><canvas id="<%= day.time %>" width="40" height="40" class="future-glyph"><script>skycons.add("<%= day.time %>", "<%= day.icon %>");</script></p>
+                    <p><%= "%d" % day.temperatureMin %> - <%= "%d" % day.temperatureMax %></p>
+                  </td>
+                <% end %>
+               </tr>
+            </table>
+        </div>
+      </div>
+
+    <script>
+      skycons.play();
+      skycons.add("now", "<%= @forecast.currently.icon %>");
+    </script>
+
+    </div><!-- /.container -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>

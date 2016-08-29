@@ -9,21 +9,16 @@ GEM
       multi_json
     hashie (3.4.4)
     json_pure (2.0.2)
-    kgio (2.10.0)
     multi_json (1.12.1)
     multipart-post (2.0.0)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
-    raindrops (0.17.0)
     sinatra (1.4.7)
       rack (~> 1.5)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
     tilt (2.0.5)
-    unicorn (5.1.0)
-      kgio (~> 2.6)
-      raindrops (~> 0.7)
 
 PLATFORMS
   ruby
@@ -33,4 +28,3 @@ DEPENDENCIES
   json_pure
   rack (= 1.5.2)
   sinatra (~> 1.4)
-  unicorn

@@ -1,0 +1,25 @@
+body {
+  padding-top: 50px;
+}
+.weather {
+  padding: 40px 15px;
+  text-align: center;
+}
+.now-glyph {
+  padding: 10px;
+  float: left;
+}
+.future-glyph {
+  padding: 5px;
+}
+.content {
+  padding-top: 50px;
+}
+
+table.forecast {
+  text-align: center;
+}
+
+table > tr.head {
+  font-weight: bold;
+}
