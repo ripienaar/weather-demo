@@ -1,0 +1,32 @@
+<H2>Weather for <%= ENV["FORECAST_LOCATION"] %></H2>
+<table>
+  <tr><th>Today Conditions</th></tr>
+  <tr><td>Summary:</td><td><%= @forecast.daily.data[0].summary %></td></tr>
+  <tr><td>Temperature:</td><td><%= @forecast.daily.data[0].temperatureMin %> - <%= @forecast.daily.data[0].temperatureMax %>C feels like <%= @forecast.daily.data[0].apparentTemperatureMin %> - <%= @forecast.daily.data[0].apparentTemperatureMax %>C</td></tr>
+  <tr><td>Humidity:</td><td><%= @forecast.daily.data[0].humidity * 100 %>%</td></tr>
+  <tr><td>Wind Speed:</td><td><%= @forecast.daily.data[0].windSpeed %>km/h</td></tr>
+  <tr><td>Change of Rain</td><td><%= @forecast.daily.data[0].precipProbability * 100 %>%</td></tr>
+  <tr><td>Next 5 days:</td><td><%= @forecast.daily.summary %></td></tr>
+</table>
+
+<script src="/skycons.js"></script>
+<script>
+  var skycons = new Skycons({"color": "black"});
+  skycons.play();
+</script>
+<br>
+<table>
+  <tr>
+    <th>Current</th>
+    <% @forecast.daily.data.each do |day| %>
+      <th><%= weekday(Time.at(day.time).wday) %></th>
+    <% end %>
+  </tr>
+  <tr>
+    <td><canvas id="current" width="40" height="40"><script>skycons.add("current", "<%= @forecast.currently.icon %>");</script></td>
+    <% @forecast.daily.data.each do |day| %>
+      <td align="center">
+        <canvas id="<%= day.time %>" width="40" height="40"><script>skycons.add("<%= day.time %>", "<%= day.icon %>");</script>
+      </td>
+    <% end %>
+</table>
